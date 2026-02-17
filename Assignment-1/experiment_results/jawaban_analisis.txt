@@ -1,0 +1,55 @@
+Berikut adalah jawaban untuk pertanyaan analisis berdasarkan eksperimen yang telah dilakukan.
+
+### 1. Mana yang paling memengaruhi kualitas: resolusi atau graylevel? Jelaskan dengan bukti.
+
+**Resolusi** secara signifikan lebih memengaruhi kualitas visual yang dipersepsikan daripada graylevel.
+
+**Bukti dari Eksperimen:**
+
+*   **Pengurangan Resolusi:** Ketika gambar `foto-kamera.jpeg` di-resize menjadi 25% (`keju_resize_25.jpg`), terjadi kehilangan detail yang sangat signifikan. Teks menjadi tidak terbaca, wajah menjadi kabur, dan struktur objek menjadi rusak. Kualitas gambar menurun drastis.
+*   **Pengurangan Graylevel:** Ketika gambar diubah menjadi grayscale (`keju_gray.jpg`), semua informasi warna hilang, tetapi semua detail struktur, bentuk, dan tekstur tetap terjaga dengan jelas. Bahkan ketika dikurangi menjadi 16 graylevel (`keju_16levels.jpg`), yang terjadi adalah *color banding* (gradasi warna yang kasar), tetapi bentuk utama objek masih sangat bisa dikenali.
+
+**Kesimpulan:** Mata manusia lebih sensitif terhadap detail spasial (yang ditentukan oleh resolusi) daripada detail warna. Kehilangan resolusi berarti kehilangan informasi fundamental tentang di mana objek berada dan seperti apa bentuknya. Kehilangan graylevel (warna) "hanya" menghilangkan atribut warna dari objek tersebut.
+
+---
+
+### 2. Mengapa bicubic lebih halus tetapi lebih lambat?
+
+Metode interpolasi Bicubic lebih halus karena menggunakan pendekatan matematis yang lebih kompleks, dan menjadi lebih lambat karena membutuhkan lebih banyak kalkulasi.
+
+*   **Cara Kerja (Kualitas Lebih Halus):** Tidak seperti Nearest Neighbor (yang hanya menyalin 1 piksel terdekat) atau Bilinear (yang mengambil rata-rata dari 4 piksel), metode **Bicubic menghitung nilai piksel baru berdasarkan 16 piksel di sekitarnya (grid 4x4)**. Metode ini menggunakan fungsi polinomial kubik untuk "menebak" nilai piksel baru dengan lebih akurat, sehingga menghasilkan transisi antar piksel yang jauh lebih mulus, menjaga ketajaman tepi, dan mengurangi artifak (efek aneh pada gambar).
+*   **Kebutuhan Komputasi (Lebih Lambat):** Karena harus mengakses 16 piksel dan melakukan perhitungan matematis yang lebih rumit (persamaan kubik) untuk *setiap piksel baru* yang dibuat, kebutuhan komputasinya jauh lebih tinggi. Proses ini memakan lebih banyak waktu CPU dibandingkan metode yang lebih sederhana.
+
+---
+
+### 3. Mengapa citra grayscale sering dipakai pada computer vision?
+
+Citra grayscale (abu-abu) sering menjadi langkah pra-pemrosesan utama dalam computer vision karena beberapa alasan strategis:
+
+1.  **Menyederhanakan Kompleksitas:** Mengubah citra dari 3 channel warna (RGB) menjadi 1 channel (intensitas) secara drastis mengurangi jumlah data yang harus diproses (sekitar 1/3 dari data asli). Ini membuat algoritma berjalan lebih cepat dan membutuhkan lebih sedikit memori.
+2.  **Fokus pada Informasi Penting:** Banyak tugas computer vision, seperti deteksi tepi, deteksi fitur (misalnya SIFT, ORB), dan segmentasi, lebih bergantung pada **perbedaan intensitas cahaya (luminance)** daripada informasi warna itu sendiri. Tepi suatu objek pada dasarnya adalah perubahan kecerahan yang drastis.
+3.  **Mengurangi Variabel:** Warna dapat sangat bervariasi tergantung pada kondisi pencahayaan. Objek yang sama bisa terlihat kemerahan saat matahari terbenam atau kebiruan di bawah lampu neon. Dengan menggunakan grayscale, algoritma menjadi lebih tahan (robust) terhadap perubahan kondisi pencahayaan.
+
+---
+
+### 4. Hitung memori teoritis salah satu citra menggunakan rumus: memori = M × N × b bit.
+
+Mari kita hitung memori teoritis untuk citra **`foto-kamera.jpeg`** sebelum dikompresi.
+
+*   **M (Lebar):** 960 piksel
+*   **N (Tinggi):** 1280 piksel
+*   **b (bit depth):** Untuk citra warna standar (RGB), setiap piksel memiliki 3 channel, dan setiap channel biasanya memiliki 8 bit (256 level). Jadi, bit depth per piksel adalah `3 channel × 8 bit/channel = 24 bit`.
+
+**Perhitungan:**
+
+*   `Memori = 960 × 1280 × 24 bit`
+*   `Memori = 1,228,800 × 24 bit`
+*   `Memori = 29,491,200 bit`
+
+**Konversi ke Unit Lain:**
+
+*   **Dalam Byte:** `29,491,200 bit / 8 bit/byte = 3,686,400 Byte`
+*   **Dalam Kilobyte (KB):** `3,686,400 Byte / 1024 Byte/KB = 3,600 KB`
+*   **Dalam Megabyte (MB):** `3,600 KB / 1024 KB/MB ≈ 3.52 MB`
+
+Jadi, memori teoritis yang dibutuhkan untuk menyimpan citra tersebut dalam format mentah (uncompressed) adalah sekitar **3.52 MB**. Ukuran file .jpeg yang sebenarnya (137.52 KB) jauh lebih kecil karena adanya proses kompresi lossy (kompresi yang membuang sebagian data).

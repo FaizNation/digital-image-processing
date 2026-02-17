@@ -1,0 +1,61 @@
+Perbandingan Kualitas dan Ukuran File untuk foto-kamera.jpeg (Resize 50% dan 25%)
+
+Berikut adalah perbandingan kualitas dan ukuran file setelah dilakukan resize 50% dan 25% untuk gambar "foto-kamera.jpeg":
+
+| Versi Gambar       | Resolusi (Lebar x Tinggi) | Ukuran File (KB) | Kualitas Visual (Estimasi) |
+|--------------------|---------------------------|------------------|----------------------------|
+| Original           | 960x1280                  | 137.52           | Sangat Baik                |
+| Resize 50%         | 480x640                   | 129.56           | Baik, sedikit penurunan    |
+| Resize 25%         | 240x320                   | 40.00            | Sedang, terlihat penurunan |
+
+**Analisis:**
+
+1.  **Ukuran File:**
+    *   Terjadi penurunan ukuran file yang signifikan seiring dengan penurunan resolusi. Dari 137.52 KB (Original) menjadi 129.56 KB (50%) dan kemudian drastis menjadi 40.00 KB (25%). Ini menunjukkan bahwa resizing adalah metode yang sangat efektif untuk mengurangi ukuran file gambar.
+
+2.  **Kualitas Visual:**
+    *   **Resize 50%**: Kualitas visual masih relatif baik. Penurunan resolusi sebesar 50% umumnya menghasilkan gambar yang masih dapat diterima untuk banyak keperluan, meskipun detail halus mungkin mulai sedikit berkurang. Ukuran file juga hanya sedikit berkurang dibandingkan resolusinya.
+    *   **Resize 25%**: Kualitas visual menunjukkan penurunan yang lebih jelas. Dengan resolusi hanya 25% dari aslinya, gambar akan terlihat lebih "pixelated" atau kurang tajam, terutama jika dilihat dalam ukuran besar. Penurunan ukuran file sangat besar, namun dengan konsekuensi kehilangan detail yang lebih banyak.
+
+**Kesimpulan:**
+
+*   **Untuk menghemat ruang penyimpanan atau mempercepat waktu loading (misalnya di web), resize 25% sangat efisien** dalam mengurangi ukuran file, namun dengan pengorbanan kualitas visual yang cukup besar.
+*   **Resize 50% menawarkan keseimbangan yang lebih baik** antara pengurangan ukuran file dan menjaga kualitas visual agar tetap baik.
+
+Pilihan antara resize 50% atau 25% (atau ukuran lain) akan tergantung pada kebutuhan spesifik proyek Anda terkait seberapa penting detail gambar dan toleransi terhadap ukuran file.
+
+---
+
+### Analisis Kuantisasi (Grayscale & Biner)
+
+Kuantisasi dalam konteks ini adalah proses mengurangi jumlah warna dalam sebuah gambar.
+
+1.  **Grayscale (Abu-abu):**
+    *   **Penjelasan:** Gambar grayscale menghilangkan semua informasi warna (merah, hijau, biru) dan hanya menyisakan informasi intensitas cahaya (kecerahan). Setiap piksel direpresentasikan oleh satu nilai antara 0 (hitam) hingga 255 (putih).
+    *   **Tujuan:** Proses ini sangat umum dalam pengolahan citra untuk menyederhanakan analisis. Banyak algoritma (misalnya, deteksi tepi) lebih mudah dan cepat dijalankan pada gambar grayscale. Ukuran file juga biasanya menjadi lebih kecil karena hanya satu channel warna yang disimpan, bukan tiga.
+
+2.  **Biner (Hitam-Putih):**
+    *   **Penjelasan:** Ini adalah bentuk kuantisasi yang paling ekstrem. Setiap piksel dipaksa menjadi salah satu dari dua nilai: hitam (0) atau putih (255). Dalam skrip ini, nilai ambang batas (threshold) 127 digunakan. Piksel yang lebih gelap dari 127 menjadi hitam, dan yang lebih terang menjadi putih.
+    *   **Tujuan:** Gambar biner berguna untuk mengisolasi objek dari latar belakang, atau untuk analisis bentuk dan struktur dasar. Ukuran filenya adalah yang paling kecil dibandingkan dengan format lainnya.
+
+---
+
+### Perbandingan Metode Interpolasi
+
+Interpolasi adalah proses "menebak" nilai piksel baru saat gambar diperbesar (upscaling). Skrip ini melakukan downscale ke 25% terlebih dahulu untuk menyimulasikan gambar resolusi rendah, lalu melakukan upscale kembali ke resolusi asli menggunakan tiga metode berbeda.
+
+| Metode Interpolasi  | Kecepatan         | Kualitas Hasil                                       | Karakteristik Utama                                      |
+|--------------------|-------------------|------------------------------------------------------|----------------------------------------------------------|
+| **Nearest Neighbor** | Sangat Cepat      | Rendah                                               | Menghasilkan gambar yang kotak-kotak (blocky/pixelated). Tepi terlihat bergerigi tajam. |
+| **Bilinear**       | Cepat             | Sedang                                               | Hasil lebih halus daripada Nearest Neighbor. Keseimbangan yang baik antara kecepatan dan kualitas. |
+| **Bicubic**        | Lambat            | Tinggi                                               | Hasil paling halus dan tajam. Detail gambar lebih terjaga. Umumnya dianggap standar untuk kualitas. |
+
+**Analisis Visual:**
+
+*   **Nearest Neighbor:** Jika Anda melihat gambar `_interp_nearest.jpg`, Anda akan melihat tepian objek yang sangat kasar dan terlihat seperti balok-balok piksel. Metode ini hanya mengambil nilai piksel terdekat tanpa melakukan perhitungan, sehingga sangat cepat namun hasilnya paling tidak akurat secara visual.
+*   **Bilinear:** Gambar `_interp_bilinear.jpg` akan terlihat jauh lebih baik. Tepi yang bergerigi akan lebih halus karena metode ini mengambil rata-rata dari 4 piksel di sekitarnya. Ini adalah pilihan "aman" untuk banyak aplikasi.
+*   **Bicubic:** Gambar `_interp_bicubic.jpg` akan menjadi yang paling tajam dan detailnya paling terjaga. Metode ini mempertimbangkan 16 piksel di sekitarnya, menghasilkan transisi warna yang paling mulus. Meskipun lebih lambat, ini adalah metode yang disarankan jika kualitas adalah prioritas utama.
+
+**Kesimpulan:**
+
+Untuk tugas pembesaran gambar (upscaling), **Bicubic** hampir selalu memberikan hasil terbaik secara visual, diikuti oleh **Bilinear**. **Nearest Neighbor** sebaiknya dihindari kecuali kecepatan pemrosesan adalah satu-satunya pertimbangan.

@@ -7,7 +7,7 @@ INPUT_DIR = 'input_images'
 RESULTS_DIR = 'experiment_results'
 
 IMAGE_PATHS = [
-    'IMG'
+    'gambar-internet.jpg'
 ]
 
 def get_file_size_kb(file_path):
